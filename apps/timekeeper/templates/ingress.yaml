@@ -9,6 +9,8 @@ metadata:
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .Values.ingress.externalDNSLabels }}
+  {{- end }}
 spec:
   rules:
     {{- range .Values.ingress.hosts }}
