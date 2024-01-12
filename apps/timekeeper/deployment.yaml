@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: timekeeper
-        image: 637321195426.dkr.ecr.us-west-2.amazonaws.com/avi-liatrio-interview:sha256:4aea94705d9853b2143ef1c6cd7cc643a6a7f2d9dc69c2c1d2f4da2fb7aa4185
+        image: 637321195426.dkr.ecr.us-west-2.amazonaws.com/avi-liatrio-interview@sha256:4aea94705d9853b2143ef1c6cd7cc643a6a7f2d9dc69c2c1d2f4da2fb7aa4185
         ports:
         - containerPort: 8080
         livenessProbe:
