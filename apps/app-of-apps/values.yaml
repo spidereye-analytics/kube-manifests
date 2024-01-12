@@ -83,5 +83,7 @@ apps:
           value: avi@spidereye.io
   - name: common-secrets
     path: apps/secrets
+    targetRevision: main
   - name: timekeeper
     path: apps/timekeeper
+    targetRevision: main
