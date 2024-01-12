@@ -21,15 +21,15 @@ service:
   port: 8080
 
 ingress:
-  enabled: false
+  enabled: true
   annotations: {}
-#  hosts:
-#    - host: timekeeper.spidereye.io
-#      paths:
-#        - path: /
-#          pathType: Prefix
-#      backend:
-#        service:
-#          name: timekeeper
-#          port:
-#            number: 8080
+  hosts:
+    - host: timekeeper.spidereye.io
+      paths:
+        - path: /
+          pathType: Prefix
+      backend:
+        service:
+          name: timekeeper
+          port:
+            number: 8080
