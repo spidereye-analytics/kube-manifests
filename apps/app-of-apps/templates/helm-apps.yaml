@@ -1,0 +1,68 @@
+{{- range $repo := .Values.repos}}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: helm-repo-{{$repo.name}}
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  url: {{$repo.url}}
+  name: {{$repo.name}}
+  type: helm
+---
+{{ end}}
+{{- range $app := .Values.apps }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: {{ $app.name }}
+  namespace: argocd
+spec:
+  destination:
+    namespace: {{ $app.namespace | default "argocd"  }}
+    server: {{ $app.server  | default "https://kubernetes.default.svc"}}
+  project: default
+  source:
+    directory:
+      recurse: {{ $app.recursive | default false }}
+    {{- if hasKey $app "chart" }}
+    chart: {{  $app.chart }}    {{end }}
+    {{- if or (or (hasKey $app "valueFile") (hasKey $app "values")) (hasKey $app "parameters") }}
+    helm:
+      {{- if hasKey $app "valueFile" }}
+      valueFiles:
+        - {{  $app.valueFile }}
+          {{- end }}
+      {{- if hasKey $app "values" }}
+      values: |-
+{{  tpl $app.values $| indent 8}}
+        {{- end }}
+        {{- end}}
+      {{- if hasKey $app "parameters" }}
+      parameters:
+        {{- range $param := $app.parameters }}
+        - name: {{ $param.name }}
+          value: {{ $param.value | quote}}
+          {{- if hasKey $param "forceString" }}
+          forceString: {{$param.forceString}}
+    {{- end }}
+    {{- end }}
+    {{- end}}
+    {{- if hasKey $app "path" }}
+    path: {{$app.path}}
+    {{- end }}
+    repoURL: {{ $app.repoURL | default "git@github.com:spidereye-analytics/kube-manifests.git" }}
+    {{- if hasKey $app "targetRevision" }}
+    targetRevision: {{ $app.targetRevision }}
+  {{- end}}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+  {{ end }}

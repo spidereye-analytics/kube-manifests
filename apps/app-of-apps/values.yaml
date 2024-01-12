@@ -1,0 +1,92 @@
+repos:
+  - name: bitnami
+    url: 'https://charts.bitnami.com/bitnami'
+  - name: prometheus-community
+    url: 'https://prometheus-community.github.io/helm-charts'
+  - name: argo
+    url: 'https://argoproj.github.io/argo-helm'
+  - name: ingress-nginx
+    url: 'https://kubernetes.github.io/ingress-nginx'
+  - name: loki
+    url: 'https://grafana.github.io/helm-charts'
+  - name: grafana
+    url: 'https://grafana.github.io/helm-charts'
+  - name: external-dns
+    url: 'https://charts.bitnami.com/bitnami'
+  - name: prometheus
+    url: 'https://prometheus-community.github.io/helm-charts'
+  - name: jetstack
+    url: 'https://charts.jetstack.io'
+  - name: traefik
+    url: 'https://traefik.github.io/charts'
+  - name: external-dns
+    url: 'https://kubernetes-sigs.github.io/external-dns/'
+  - name: istio
+    url: 'https://istio-release.storage.googleapis.com/charts'
+apps:
+  - name: appsets
+    path: apps/common/appsets
+  - name: cronjobs
+    path: apps/cronjobs
+    namespace: default
+  - name: metrics-server
+    chart: metrics-server
+    namespace: kube-system
+    repoURL: 'https://charts.bitnami.com/bitnami'
+    targetRevision: 6.6.6
+  - name: sealed-secrets
+    namespace: kube-system
+    chart: sealed-secrets
+    repoURL: 'https://bitnami-labs.github.io/sealed-secrets/'
+    targetRevision: 2.14.1
+    parameters:
+      - name: fullnameOverride
+        value: sealed-secrets-controller
+  - name: ingress-nginx
+    namespace: ingress-nginx
+    chart: ingress-nginx
+    repoURL: 'https://kubernetes.github.io/ingress-nginx'
+    targetRevision: 4.4.0
+    parameters:
+      - name: controller.publishService.pathOverride
+        value: ingress-nginx/ingress-nginx-controller
+      - name: defaultBackend.podLabels.name
+        value: ingress-nginx
+      - name: controller.ingressClassByName
+        value: true
+  - name: cert-manager
+    namespace: cert-manager
+    chart: cert-manager
+    repoURL: 'https://charts.jetstack.io'
+    targetRevision: 1.12.0
+    parameters:
+      - name: installCRDs
+        value: true
+      - name: maxConcurrentChallenges
+        value: 10
+  - name: external-dns
+    namespace: kube-system
+    chart: external-dns
+    repoURL: 'https://kubernetes-sigs.github.io/external-dns/'
+    targetRevision: 1.12.1
+    values: |
+      serviceAccount:
+        create: true
+        name: external-dns
+      interval: 1m
+      logLevel: debug
+      policy: upsert-only
+      provider: cloudflare
+      txtOwnerId: liatrio
+      env:
+        - name: CF_API_KEY
+          valueFrom:
+            secretKeyRef:
+                name: cloudflare-api
+                key: cloudflare_api_key
+        - name: CF_API_EMAIL
+          value: avi@spidereye.io
+  - name: common-secrets
+    path: apps/secrets
+  - name: timekeeper
+    path: apps/timekeeper

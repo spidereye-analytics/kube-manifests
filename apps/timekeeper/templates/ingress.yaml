@@ -1,0 +1,28 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "timekeeper.fullname" . }}
+  labels:
+    {{- include "timekeeper.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: {{ include "timekeeper.fullname" . }}
+                port:
+                  number: {{ $.Values.service.port }}
+          {{- end }}
+    {{- end }}
+{{- end }}

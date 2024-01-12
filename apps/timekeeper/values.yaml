@@ -1,0 +1,35 @@
+replicaCount: 3
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: "app.kubernetes.io/name"
+              operator: In
+              values:
+                - timekeeper
+        topologyKey: "topology.kubernetes.io/zone"
+
+image:
+  repository: 637321195426.dkr.ecr.us-west-2.amazonaws.com/avi-liatrio-interview
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: timekeeper.spidereye.io
+      paths:
+        - path: /
+          pathType: Prefix
+      backend:
+        service:
+          name: timekeeper
+          port:
+            number: 8080

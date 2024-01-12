@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "timekeeper.fullname" . }}
+  labels:
+    {{- include "timekeeper.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "timekeeper.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "timekeeper.selectorLabels" . | nindent 8 }}
+    spec:
+      affinity:
+        {{- toYaml .Values.affinity | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
