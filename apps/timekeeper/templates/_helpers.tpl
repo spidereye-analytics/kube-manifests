@@ -14,8 +14,15 @@
 
 
 {{- define "timekeeper.labels" -}}
-helm.sh/chart: {{ include "timekeeper.chart" . }}
 {{ include "timekeeper.name" . }}: {{ include "timekeeper.name" . }}
+app.kubernetes.io/name: {{ include "timekeeper.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "timekeeper.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "timekeeper.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
