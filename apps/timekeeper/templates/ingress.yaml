@@ -20,9 +20,9 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-{{/*                name: {{ include "timekeeper.fullname" . }}*/}}
-{{/*                port:*/}}
-{{/*                  number: {{ $.Values.service.port }}*/}}
+                name: timekeeper
+                port:
+                  number: {{ $.Values.service.port }}
           {{- end }}
     {{- end }}
 {{- end }}
