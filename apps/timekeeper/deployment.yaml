@@ -19,6 +19,18 @@ spec:
         image: 637321195426.dkr.ecr.us-west-2.amazonaws.com/avi-liatrio-interview:latest
         ports:
         - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
