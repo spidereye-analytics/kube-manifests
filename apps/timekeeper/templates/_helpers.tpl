@@ -1,7 +1,21 @@
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
+
+{{- define "timekeeper.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+
 {{- define "timekeeper.fullname" -}}
-{{- printf "%s-%s" .Release.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+
+
+{{- define "timekeeper.labels" -}}
+helm.sh/chart: {{ include "timekeeper.chart" . }}
+{{ include "timekeeper.name" . }}: {{ include "timekeeper.name" . }}
+app.kubernetes.io/name: {{ include "timekeeper.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
