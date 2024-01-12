@@ -24,10 +24,6 @@ repos:
   - name: istio
     url: 'https://istio-release.storage.googleapis.com/charts'
 apps:
-  - name: appsets
-    path: apps/common/appsets
-  - name: cronjobs
-    path: apps/cronjobs
     namespace: default
   - name: metrics-server
     chart: metrics-server
