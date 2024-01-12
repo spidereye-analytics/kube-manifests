@@ -84,8 +84,8 @@ apps:
   - name: common-secrets
     path: apps/secrets
     targetRevision: main
-    repoUrl: https://github.com/spidereye-analytics/kube-manifests.git
+    repoURL: https://github.com/spidereye-analytics/kube-manifests.git
   - name: timekeeper
     path: apps/timekeeper
     targetRevision: main
-    repoUrl: https://github.com/spidereye-analytics/kube-manifests.git
+    repoURL: https://github.com/spidereye-analytics/kube-manifests.git
