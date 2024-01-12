@@ -23,13 +23,13 @@ service:
 ingress:
   enabled: false
   annotations: {}
-  hosts:
-    - host: timekeeper.spidereye.io
-      paths:
-        - path: /
-          pathType: Prefix
-      backend:
-        service:
-          name: timekeeper
-          port:
-            number: 8080
+#  hosts:
+#    - host: timekeeper.spidereye.io
+#      paths:
+#        - path: /
+#          pathType: Prefix
+#      backend:
+#        service:
+#          name: timekeeper
+#          port:
+#            number: 8080
