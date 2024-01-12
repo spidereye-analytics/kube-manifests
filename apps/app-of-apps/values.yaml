@@ -24,7 +24,6 @@ repos:
   - name: istio
     url: 'https://istio-release.storage.googleapis.com/charts'
 apps:
-    namespace: default
   - name: metrics-server
     chart: metrics-server
     namespace: kube-system
